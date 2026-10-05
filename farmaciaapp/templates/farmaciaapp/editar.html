@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Medicamento</title>
+</head>
+<body>
+    <h1>Editar Medicamento</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <p>
+            <label for="nombre">Nombre del Medicamento:</label><br>
+            <input type="text" id="nombre" name="nombre" value="{{ medicamento.nombre }}" required>
+        </p>
+
+        <p>
+            <label for="descripcion">Descripción:</label><br>
+            <textarea id="descripcion" name="descripcion" rows="4" cols="40">{{ medicamento.descripcion }}</textarea>
+        </p>
+
+        <p>
+            <label for="precio">Precio ($):</label><br>
+            <input type="number" id="precio" name="precio" min="0" value="{{ medicamento.precio }}" required>
+        </p>
+
+        <p>
+            <label for="stock">Stock disponible:</label><br>
+            <input type="number" id="stock" name="stock" min="0" value="{{ medicamento.stock }}" required>
+        </p>
+
+        <p>
+            <input type="checkbox" id="requiere_receta" name="requiere_receta" {% if medicamento.requiere_receta %}checked{% endif %}>
+            <label for="requiere_receta">¿Requiere Receta Médica?</label>
+        </p>
+
+        <button type="submit">Guardar Cambios</button>
+        <a href="{% url 'inicio' %}">Cancelar</a>
+    </form>
+</body>
+</html>

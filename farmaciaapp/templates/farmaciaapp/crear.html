@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Medicamento</title>
+</head>
+<body>
+    <h1>Registrar Nuevo Medicamento</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <p>
+            <label for="nombre">Nombre del Medicamento:</label><br>
+            <input type="text" id="nombre" name="nombre" required>
+        </p>
+
+        <p>
+            <label for="descripcion">Descripción:</label><br>
+            <textarea id="descripcion" name="descripcion" rows="4" cols="40"></textarea>
+        </p>
+
+        <p>
+            <label for="precio">Precio ($):</label><br>
+            <input type="number" id="precio" name="precio" min="0" value="0" required>
+        </p>
+
+        <p>
+            <label for="stock">Stock disponible:</label><br>
+            <input type="number" id="stock" name="stock" min="0" value="0" required>
+        </p>
+
+        <p>
+            <input type="checkbox" id="requiere_receta" name="requiere_receta">
+            <label for="requiere_receta">¿Requiere Receta Médica?</label>
+        </p>
+
+        <button type="submit">Guardar Medicamento</button>
+        <a href="{% url 'inicio' %}">Cancelar</a>
+    </form>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Medicamento</title>
+</head>
+<body>
+    <h1>Detalle del Medicamento</h1>
+
+    <p><strong>Nombre:</strong> {{ medicamento.nombre }}</p>
+    <p><strong>Descripción:</strong> {{ medicamento.descripcion|default:"Sin descripción" }}</p>
+    <p><strong>Precio:</strong> ${{ medicamento.precio }}</p>
+    <p><strong>Stock disponible:</strong> {{ medicamento.stock }} unidades</p>
+    <p><strong>Venta bajo receta:</strong> 
+        {% if medicamento.requiere_receta %}
+            Sí
+        {% else %}
+            No (Venta Libre)
+        {% endif %}
+    </p>
+
+    <hr>
+    <a href="{% url 'editar_medicamento' medicamento.id %}">Editar</a> |
+    <a href="{% url 'inicio' %}">Volver al Inventario</a>
+</body>
+</html>

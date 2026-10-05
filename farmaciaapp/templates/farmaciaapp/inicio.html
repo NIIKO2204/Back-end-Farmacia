@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmacia - Lista de Medicamentos</title>
+</head>
+<body>
+    <h1>Gestión de Farmacia - Inventario</h1>
+
+    <a href="{% url 'crear_medicamento' %}">Registrar Nuevo Medicamento</a>
+    <hr>
+
+    <table border="1" cellpadding="8" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Requiere Receta</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for medicamento in medicamentos %}
+            <tr>
+                <td><strong>{{ medicamento.nombre }}</strong></td>
+                <td>${{ medicamento.precio }}</td>
+                <td>{{ medicamento.stock }} unidades</td>
+                <td>
+                    {% if medicamento.requiere_receta %}
+                        <strong>Sí</strong>
+                    {% else %}
+                        No
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'detalle_medicamento' medicamento.id %}">Ver Detalle</a> |
+                    <a href="{% url 'editar_medicamento' medicamento.id %}">Editar</a> |
+                    <a href="{% url 'eliminar_medicamento' medicamento.id %}">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No hay medicamentos registrados en el sistema.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
