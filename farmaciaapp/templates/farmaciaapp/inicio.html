@@ -1,51 +1,46 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Farmacia - Lista de Medicamentos</title>
-</head>
-<body>
-    <h1>Gestión de Farmacia - Inventario</h1>
+{% extends 'farmaciaapp/base.html' %}
 
-    <a href="{% url 'crear_medicamento' %}">Registrar Nuevo Medicamento</a>
-    <hr>
+{% block title %}Inventario{% endblock %}
 
-    <table border="1" cellpadding="8" cellspacing="0">
-        <thead>
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="h4 fw-bold text-secondary">Inventario de Medicamentos</h2>
+    <!-- Este botón conecta con tu crear.html -->
+    <a href="#" class="btn btn-success px-4 rounded-pill">Añadir Registro</a>
+</div>
+
+<div class="table-responsive">
+    <!-- Tabla minimalista: bordes horizontales suaves y texto centrado verticalmente -->
+    <table class="table table-hover align-middle">
+        <thead class="text-secondary" style="border-bottom: 2px solid #e0e0e0;">
             <tr>
-                <th>Nombre</th>
-                <th>Precio</th>
-                <th>Stock</th>
-                <th>Requiere Receta</th>
-                <th>Acciones</th>
+                <th scope="col" class="fw-normal">Nombre</th>
+                <th scope="col" class="fw-normal">Laboratorio</th>
+                <th scope="col" class="fw-normal">Precio</th>
+                <th scope="col" class="fw-normal">Stock</th>
+                <th scope="col" class="fw-normal text-end">Acciones</th>
             </tr>
         </thead>
-        <tbody>
-            {% for medicamento in medicamentos %}
+        <tbody class="border-top-0">
+            <!-- Aquí irá el ciclo FOR de Django para cargar la base de datos -->
+            <!-- Ejemplo de fila estática para ver el diseño: -->
             <tr>
-                <td><strong>{{ medicamento.nombre }}</strong></td>
-                <td>${{ medicamento.precio }}</td>
-                <td>{{ medicamento.stock }} unidades</td>
+                <td class="fw-semibold">Paracetamol 500mg</td>
+                <td class="text-muted">Laboratorio Chile</td>
+                <td>$1.500</td>
                 <td>
-                    {% if medicamento.requiere_receta %}
-                        <strong>Sí</strong>
-                    {% else %}
-                        No
-                    {% endif %}
+                    <!-- Pequeño badge para el stock -->
+                    <span class="badge bg-success bg-opacity-10 text-success px-2 py-1 rounded-pill">150 unid.</span>
                 </td>
-                <td>
-                    <a href="{% url 'detalle_medicamento' medicamento.id %}">Ver Detalle</a> |
-                    <a href="{% url 'editar_medicamento' medicamento.id %}">Editar</a> |
-                    <a href="{% url 'eliminar_medicamento' medicamento.id %}">Eliminar</a>
+                <td class="text-end">
+                    <!-- Opciones para ver detalle, editar y eliminar -->
+                    <a href="#" class="btn btn-sm btn-outline-primary border-0"><i class="bi bi-eye"></i></a>
+                    <a href="#" class="btn btn-sm btn-outline-secondary border-0"><i class="bi bi-pencil"></i></a>
+                    <a href="#" class="btn btn-sm btn-outline-danger border-0"><i class="bi bi-trash"></i></a>
                 </td>
             </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5">No hay medicamentos registrados en el sistema.</td>
-            </tr>
-            {% endfor %}
+            <!-- Fin de ejemplo -->
         </tbody>
     </table>
-</body>
-</html>
+</div>
+{% endblock %}
