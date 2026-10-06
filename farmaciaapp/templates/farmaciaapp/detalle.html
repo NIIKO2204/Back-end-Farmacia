@@ -1,27 +1,23 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle de Medicamento</title>
-</head>
-<body>
-    <h1>Detalle del Medicamento</h1>
+{% extends 'farmaciaapp/base.html' %}
 
-    <p><strong>Nombre:</strong> {{ medicamento.nombre }}</p>
-    <p><strong>Descripción:</strong> {{ medicamento.descripcion|default:"Sin descripción" }}</p>
-    <p><strong>Precio:</strong> ${{ medicamento.precio }}</p>
-    <p><strong>Stock disponible:</strong> {{ medicamento.stock }} unidades</p>
-    <p><strong>Venta bajo receta:</strong> 
-        {% if medicamento.requiere_receta %}
-            Sí
-        {% else %}
-            No (Venta Libre)
-        {% endif %}
-    </p>
+{% block title %}Detalle del Medicamento{% endblock %}
 
-    <hr>
-    <a href="{% url 'editar_medicamento' medicamento.id %}">Editar</a> |
-    <a href="{% url 'inicio' %}">Volver al Inventario</a>
-</body>
-</html>
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm border-0 rounded-4 mt-4 p-4">
+            <h3 class="fw-bold text-success mb-3">{{ medicamento.nombre }}</h3>
+            <p><strong>Descripción:</strong> {{ medicamento.descripcion|default:"Sin descripción" }}</p>
+            <p><strong>Precio:</strong> ${{ medicamento.precio }}</p>
+            <p><strong>Stock:</strong> {{ medicamento.stock }} unidades</p>
+            <p><strong>Requiere Receta:</strong> {% if medicamento.requiere_receta %}Sí{% else %}No{% endif %}</p>
+            <p><strong>Fecha de Ingreso:</strong> {{ medicamento.fecha_ingreso|date:"d/m/Y H:i" }}</p>
+
+            <div class="mt-4 d-flex gap-2">
+                <a href="{% url 'editar_medicamento' medicamento.id %}" class="btn btn-warning rounded-pill px-4">Editar</a>
+                <a href="{% url 'inicio' %}" class="btn btn-secondary rounded-pill px-4">Volver</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

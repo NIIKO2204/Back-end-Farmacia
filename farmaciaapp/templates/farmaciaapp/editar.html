@@ -1,42 +1,57 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Medicamento</title>
-</head>
-<body>
-    <h1>Editar Medicamento</h1>
+{% extends 'farmaciaapp/base.html' %}
 
-    <form method="POST">
-        {% csrf_token %}
-        <p>
-            <label for="nombre">Nombre del Medicamento:</label><br>
-            <input type="text" id="nombre" name="nombre" value="{{ medicamento.nombre }}" required>
-        </p>
+{% block title %}Editar Medicamento{% endblock %}
 
-        <p>
-            <label for="descripcion">Descripción:</label><br>
-            <textarea id="descripcion" name="descripcion" rows="4" cols="40">{{ medicamento.descripcion }}</textarea>
-        </p>
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm border-0 rounded-4 mt-4">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <h2 class="h4 fw-bold text-success">Editar Medicamento</h2>
+                </div>
 
-        <p>
-            <label for="precio">Precio ($):</label><br>
-            <input type="number" id="precio" name="precio" min="0" value="{{ medicamento.precio }}" required>
-        </p>
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Nombre</label>
+                        <input type="text" name="nombre" value="{{ medicamento.nombre }}" class="form-control" required>
+                    </div>
 
-        <p>
-            <label for="stock">Stock disponible:</label><br>
-            <input type="number" id="stock" name="stock" min="0" value="{{ medicamento.stock }}" required>
-        </p>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Descripción</label>
+                        <textarea name="descripcion" class="form-control" rows="3">{{ medicamento.descripcion }}</textarea>
+                    </div>
 
-        <p>
-            <input type="checkbox" id="requiere_receta" name="requiere_receta" {% if medicamento.requiere_receta %}checked{% endif %}>
-            <label for="requiere_receta">¿Requiere Receta Médica?</label>
-        </p>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Precio ($)</label>
+                        <input type="number" name="precio" value="{{ medicamento.precio }}" class="form-control" min="0" required>
+                    </div>
 
-        <button type="submit">Guardar Cambios</button>
-        <a href="{% url 'inicio' %}">Cancelar</a>
-    </form>
-</body>
-</html>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Stock</label>
+                        <input type="number" name="stock" value="{{ medicamento.stock }}" class="form-control" min="0" required>
+                    </div>
+
+                    <div class="mb-4 form-check">
+                        <input type="checkbox" name="requiere_receta" id="requiere_receta" class="form-check-input" {% if medicamento.requiere_receta %}checked{% endif %}>
+                        <label class="form-check-label fw-semibold" for="requiere_receta">
+                            Requiere receta médica
+                        </label>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success rounded-pill py-2 fw-bold">
+                            Actualizar Medicamento
+                        </button>
+                        <a href="{% url 'inicio' %}" class="btn btn-light rounded-pill py-2 text-secondary">
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
