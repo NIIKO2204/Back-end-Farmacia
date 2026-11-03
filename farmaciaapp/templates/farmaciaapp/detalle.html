@@ -11,7 +11,7 @@
             <p><strong>Precio:</strong> ${{ medicamento.precio }}</p>
             <p><strong>Stock:</strong> {{ medicamento.stock }} unidades</p>
             <p><strong>Requiere Receta:</strong> {% if medicamento.requiere_receta %}Sí{% else %}No{% endif %}</p>
-            <p><strong>Fecha de Ingreso:</strong> {{ medicamento.fecha_ingreso|date:"d/m/Y H:i" }}</p>
+            <p><strong>Fecha de Ingreso:</strong> {{ medicamento.fecha_ingreso|date:"d/m/Y" }}</p>
 
             <div class="mt-4 d-flex gap-2">
                 <a href="{% url 'editar_medicamento' medicamento.id %}" class="btn btn-warning rounded-pill px-4">Editar</a>
