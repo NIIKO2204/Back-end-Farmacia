@@ -1,0 +1,74 @@
+{% extends 'farmaciaapp/base.html' %}
+
+{% block title %}Nuevo Medicamento{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm border-0 rounded-4 mt-2">
+            <div class="card-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <span class="badge bg-light text-success border p-3 rounded-circle mb-2" style="color: #0d9488 !important;">
+                        <i class="bi bi-journal-medical fs-3"></i>
+                    </span>
+                    <h2 class="h4 fw-bold" style="color: #0f766e;">Registrar Medicamento</h2>
+                    <p class="text-muted small">Ingresa la ficha técnica del producto.</p>
+                </div>
+
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-secondary">Nombre del Medicamento</label>
+                        <input type="text" name="nombre" class="form-control rounded-3" placeholder="Ej: Paracetamol 500mg" maxlength="30" required>
+                        <div class="form-text fs-7 text-muted">Máximo 30 caracteres.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-secondary">Categoría / Familia</label>
+                        <input type="text" name="categoria" class="form-control rounded-3" placeholder="Ej: Analgésico" maxlength="15">
+                        <div class="form-text fs-7 text-muted">Máximo 15 caracteres.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-secondary">Descripción del Producto</label>
+                        <textarea name="descripcion" class="form-control rounded-3" rows="2" placeholder="Indicaciones o dosis breve" maxlength="50"></textarea>
+                        <div class="form-text fs-7 text-muted">Máximo 50 caracteres.</div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-semibold small text-secondary">Precio Unitario ($)</label>
+                            <input type="number" name="precio" class="form-control rounded-3" value="0" min="0" max="999999999" step="0.01" required>
+                            <div class="form-text fs-7 text-muted">Máx. 9 dígitos.</div>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-semibold small text-secondary">Stock Disponible</label>
+                            <input type="number" name="stock" class="form-control rounded-3" value="0" min="0" max="9999" step="1" required>
+                            <div class="form-text fs-7 text-muted">Máx. 4 dígitos.</div>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-light rounded-3 mb-4 border">
+                        <div class="form-check">
+                            <input type="checkbox" name="requiere_receta" id="requiere_receta" class="form-check-input">
+                            <label class="form-check-label fw-semibold text-dark" for="requiere_receta">
+                                <i class="bi bi-file-earmark-medical me-1 text-danger"></i> Requiere presentación de receta médica
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-pharma rounded-pill py-2 fw-bold shadow-sm">
+                            <i class="bi bi-save me-1"></i> Guardar Medicamento
+                        </button>
+                        <a href="{% url 'inicio' %}" class="btn btn-light rounded-pill py-2 text-secondary border">
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

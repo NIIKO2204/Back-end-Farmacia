@@ -1,0 +1,99 @@
+{% extends 'farmaciaapp/base.html' %}
+
+{% block title %}Inventario de Farmacia{% endblock %}
+
+{% block content %}
+<!-- Encabezado -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="h3 fw-bold mb-1" style="color: #0f766e;">
+            <i class="bi bi-capsule-capsule me-2"></i>Catálogo de Medicamentos
+        </h2>
+        <p class="text-muted small mb-0">Gestión de stock, precios y requisitos de receta médica.</p>
+    </div>
+    <a href="{% url 'crear_medicamento' %}" class="btn btn-pharma rounded-pill px-4 shadow-sm fw-semibold">
+        <i class="bi bi-plus-circle me-1"></i> Nuevo Medicamento
+    </a>
+</div>
+
+<!-- Tabla de Productos -->
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light text-uppercase fs-7 text-muted border-bottom">
+                    <tr>
+                        <th class="py-3 ps-4"><i class="bi bi-tag me-1"></i> Producto / Cat.</th>
+                        <th class="py-3"><i class="bi bi-currency-dollar me-1"></i> Precio Unitario</th>
+                        <th class="py-3"><i class="bi bi-boxes me-1"></i> Stock</th>
+                        <th class="py-3"><i class="bi bi-file-medical me-1"></i> Venta</th>
+                        <th class="py-3"><i class="bi bi-calendar3 me-1"></i> Ingreso</th>
+                        <th class="py-3 text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for medicamento in medicamentos %}
+                    <tr>
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge rounded-circle p-2 bg-light text-success border">
+                                    <i class="bi bi-prescription2 fs-6" style="color: #0d9488;"></i>
+                                </span>
+                                <div>
+                                    <span class="fw-bold text-dark d-block">{{ medicamento.nombre }}</span>
+                                    <small class="text-muted">{{ medicamento.categoria|default:"General" }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="fw-bold fs-6" style="color: #0f766e;">${{ medicamento.precio }}</td>
+                        <td>
+                            {% if medicamento.stock <= 5 %}
+                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1 rounded-pill">
+                                    <i class="bi bi-exclamation-circle me-1"></i> {{ medicamento.stock }} crit.
+                                </span>
+                            {% else %}
+                                <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 rounded-pill">
+                                    {{ medicamento.stock }} unidades
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if medicamento.requiere_receta %}
+                                <span class="badge bg-warning text-dark px-2 py-1 rounded-pill fw-normal">
+                                    <i class="bi text-dark bi-shield-lock me-1"></i> Receta Obligatoria
+                                </span>
+                            {% else %}
+                                <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-2 py-1 rounded-pill fw-normal">
+                                    <i class="bi bi-check2-circle me-1"></i> Venta Libre
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="text-muted small">{{ medicamento.fecha_ingreso|date:"d/m/Y" }}</td>
+                        <td class="text-center pe-4">
+                            <div class="btn-group shadow-sm rounded-pill overflow-hidden" role="group">
+                                <a href="{% url 'detalle_medicamento' medicamento.id %}" class="btn btn-sm btn-light text-info border-end" title="Ver detalle">
+                                    <i class="bi bi-eye-fill"></i>
+                                </a>
+                                <a href="{% url 'editar_medicamento' medicamento.id %}" class="btn btn-sm btn-light text-warning border-end" title="Editar">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </a>
+                                <a href="{% url 'eliminar_medicamento' medicamento.id %}" class="btn btn-sm btn-light text-danger" title="Eliminar">
+                                    <i class="bi bi-trash-fill"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            <i class="bi bi-prescription display-5 d-block mb-2 opacity-50" style="color: #0d9488;"></i>
+                            No hay medicamentos registrados en el botiquín del sistema.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

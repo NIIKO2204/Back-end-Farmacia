@@ -1,0 +1,63 @@
+{% extends 'farmaciaapp/base.html' %}
+
+{% block title %}Editar Medicamento{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm border-0 rounded-4 mt-2">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <h2 class="h4 fw-bold text-success">Editar Medicamento</h2>
+                    <p class="text-muted small">Modifica los campos respetando los límites.</p>
+                </div>
+
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Nombre (máx. 30 caracteres)</label>
+                        <input type="text" name="nombre" value="{{ medicamento.nombre }}" class="form-control" maxlength="30" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Categoría (máx. 15 caracteres)</label>
+                        <input type="text" name="categoria" value="{{ medicamento.categoria }}" class="form-control" maxlength="15">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Descripción (máx. 50 caracteres)</label>
+                        <textarea name="descripcion" class="form-control" rows="3" maxlength="50">{{ medicamento.descripcion }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Precio ($) (máx. 9 dígitos)</label>
+                        <input type="number" name="precio" value="{{ medicamento.precio }}" class="form-control" min="0" max="999999999" step="0.01" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Stock (máx. 4 dígitos)</label>
+                        <input type="number" name="stock" value="{{ medicamento.stock }}" class="form-control" min="0" max="9999" step="1" required>
+                    </div>
+
+                    <div class="mb-4 form-check">
+                        <input type="checkbox" name="requiere_receta" id="requiere_receta" class="form-check-input" {% if medicamento.requiere_receta %}checked{% endif %}>
+                        <label class="form-check-label fw-semibold" for="requiere_receta">
+                            Requiere receta médica
+                        </label>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success rounded-pill py-2 fw-bold text-white">
+                            Actualizar Medicamento
+                        </button>
+                        <a href="{% url 'inicio' %}" class="btn btn-light rounded-pill py-2 text-secondary">
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
