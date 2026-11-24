@@ -1,5 +1,5 @@
 """
-Django settings for tareas project.
+Django settings for farmacia project.
 """
 
 from pathlib import Path
@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     # Lista negra para revocar Refresh Tokens
     "rest_framework_simplejwt.token_blacklist",
-    "tareasapp",
+    "farmaciaapp",
 ]
 
 
@@ -53,7 +53,7 @@ MIDDLEWARE = [
 ]
 
 
-ROOT_URLCONF = "tareas.urls"
+ROOT_URLCONF = "farmacia.urls"
 
 
 # =====================================================
@@ -77,7 +77,7 @@ TEMPLATES = [
 ]
 
 
-WSGI_APPLICATION = "tareas.wsgi.application"
+WSGI_APPLICATION = "farmacia.wsgi.application"
 
 
 # =====================================================
@@ -87,7 +87,7 @@ WSGI_APPLICATION = "tareas.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "tareasdb25",
+        "NAME": "farmaciadb25",
         "USER": "root",
         "PASSWORD": "",
         "HOST": "localhost",

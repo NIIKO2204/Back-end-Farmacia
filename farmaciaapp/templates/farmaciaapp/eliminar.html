@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eliminar tarea</title>
+    <title>Eliminar medicamento - Farmacia Salud</title>
 
     <style>
         * {
@@ -17,31 +16,50 @@
         body {
             min-height: 100vh;
             font-family: "Segoe UI", Arial, sans-serif;
-            color: #1e293b;
-            background: linear-gradient(135deg, #dbeafe, #eff6ff, #bfdbfe);
+            color: #0f172a;
+            background: linear-gradient(135deg, #d1fae5, #ecfdf5, #a7f3d0);
         }
 
         .navbar {
-            padding: 20px 6%;
-            background: white;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.10);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 6%;
+            background: #ffffff;
+            border-bottom: 3px solid #10b981;
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.10);
+        }
+
+        .cruz {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #10b981, #047857);
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
         }
 
         .navbar h2 {
-            color: #1d4ed8;
+            color: #065f46;
+            font-size: 20px;
         }
 
         .contenedor {
             width: 90%;
             max-width: 750px;
-            margin: 55px auto;
+            margin: 45px auto;
         }
 
         .panel {
             padding: 35px;
-            background: white;
+            background: #ffffff;
+            border: 1px solid #d1fae5;
             border-radius: 18px;
-            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.10);
+            box-shadow: 0 12px 30px rgba(5, 150, 105, 0.12);
             text-align: center;
         }
 
@@ -51,7 +69,7 @@
         }
 
         .descripcion-panel {
-            color: #64748b;
+            color: #475569;
             line-height: 1.5;
         }
 
@@ -66,8 +84,8 @@
         .datos {
             margin: 25px 0;
             padding: 22px;
-            background: #eff6ff;
-            border: 1px solid #dbeafe;
+            background: #f0fdf4;
+            border: 1px solid #d1fae5;
             border-radius: 10px;
             text-align: left;
         }
@@ -83,7 +101,7 @@
         .etiqueta {
             display: block;
             font-weight: 700;
-            color: #1e40af;
+            color: #065f46;
             margin-bottom: 6px;
         }
 
@@ -100,12 +118,12 @@
             font-weight: 600;
         }
 
-        .completada {
-            color: #166534;
-            background: #dcfce7;
+        .disponible {
+            color: #065f46;
+            background: #d1fae5;
         }
 
-        .pendiente {
+        .no-disponible {
             color: #92400e;
             background: #fef3c7;
         }
@@ -118,7 +136,8 @@
             margin-top: 25px;
         }
 
-        button, .boton {
+        button,
+        .boton {
             padding: 12px 18px;
             border: none;
             border-radius: 8px;
@@ -134,7 +153,7 @@
         }
 
         .eliminar {
-            color: white;
+            color: #ffffff;
             background: #dc2626;
         }
 
@@ -143,21 +162,27 @@
         }
 
         .volver {
-            color: #1e40af;
-            background: #dbeafe;
+            color: #065f46;
+            background: #d1fae5;
+        }
+
+        .volver:hover {
+            background: #a7f3d0;
         }
 
         .mensaje {
             margin-top: 20px;
             padding: 14px;
             border-radius: 8px;
-            color: #1e40af;
-            background: #eff6ff;
+            color: #065f46;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
         }
 
         .mensaje-error {
             color: #991b1b;
             background: #fee2e2;
+            border-color: #fecaca;
         }
 
         @media (max-width: 600px) {
@@ -177,43 +202,54 @@
     {% csrf_token %}
 
     <header class="navbar">
-        <h2>Gestión de tareas</h2>
+        <span class="cruz" aria-hidden="true">+</span>
+        <h2>Farmacia Salud</h2>
     </header>
 
     <main class="contenedor">
 
         <section class="panel">
 
-            <h1>Eliminar tarea</h1>
+            <h1>Eliminar medicamento</h1>
 
             <p class="descripcion-panel">
-                Revisa la información antes de eliminar el registro.
+                Revisa los datos del medicamento antes de eliminarlo del inventario.
             </p>
 
             <div class="advertencia">
-                Atención: esta acción no se puede deshacer.
+                Atención: esta acción eliminará el registro de forma permanente.
             </div>
 
             <div class="datos">
 
                 <div class="campo">
                     <span class="etiqueta">ID:</span>
-                    <span id="tareaId" class="valor">Cargando...</span>
+                    <span id="medicamentoId" class="valor">Cargando...</span>
                 </div>
 
                 <div class="campo">
-                    <span class="etiqueta">Título:</span>
-                    <span id="titulo" class="valor"></span>
+                    <span class="etiqueta">Medicamento:</span>
+                    <span id="nombre" class="valor"></span>
                 </div>
 
                 <div class="campo">
-                    <span class="etiqueta">Descripción:</span>
+                    <span class="etiqueta">Descripción / Presentación:</span>
                     <span id="descripcion" class="valor"></span>
                 </div>
 
                 <div class="campo">
-                    <span class="etiqueta">Estado:</span>
-                    <span id="estado" class="estado"></span>
+                    <span class="etiqueta">Precio:</span>
+                    <span id="precio" class="valor"></span>
+                </div>
+
+                <div class="campo">
+                    <span class="etiqueta">Stock:</span>
+                    <span id="stock" class="valor"></span>
+                </div>
+
+                <div class="campo">
+                    <span class="etiqueta">Disponibilidad:</span>
+                    <span id="disponibilidad" class="estado"></span>
                 </div>
 
             </div>
@@ -226,10 +262,10 @@
                     class="eliminar"
                     disabled
                 >
-                    Sí, eliminar tarea
+                    Sí, eliminar medicamento
                 </button>
 
-                <a href="/tareas/" class="boton volver">
+                <a href="/medicamentos/" class="boton volver">
                     Cancelar y volver
                 </a>
 
@@ -243,27 +279,18 @@
 
     <script>
 
-        // =========================================
-        // CONFIGURACION
-        // =========================================
-
         const partesURL = window.location.pathname
             .split("/")
             .filter(Boolean);
 
-        const tareaId = partesURL[partesURL.length - 1];
+        const medicamentoId = partesURL[partesURL.length - 1];
 
         const btnEliminar = document.getElementById("btnEliminar");
         const mensaje = document.getElementById("mensaje");
 
         const csrfToken = document.querySelector(
-            '[name=csrfmiddlewaretoken]'
+            "[name=csrfmiddlewaretoken]"
         ).value;
-
-
-        // =========================================
-        // MOSTRAR MENSAJES
-        // =========================================
 
         function mostrarMensaje(texto, error = false) {
 
@@ -276,18 +303,12 @@
 
         }
 
-
-        // =========================================
-        // CONSULTAR TAREA - GET
-        // API: /api/tareas/<id>/
-        // =========================================
-
-        async function cargarTarea() {
+        async function cargarMedicamento() {
 
             try {
 
                 const respuesta = await fetch(
-                    `/api/tareas/${tareaId}/`,
+                    `/api/medicamentos/${medicamentoId}/`,
                     {
                         method: "GET",
                         credentials: "same-origin",
@@ -315,7 +336,7 @@
                 if (respuesta.status === 404) {
 
                     throw new Error(
-                        "La tarea solicitada no existe."
+                        "El medicamento solicitado no existe."
                     );
 
                 }
@@ -323,33 +344,30 @@
                 if (!respuesta.ok) {
 
                     throw new Error(
-                        `No se pudo cargar la tarea. HTTP ${respuesta.status}`
+                        `No se pudo cargar el medicamento. HTTP ${respuesta.status}`
                     );
 
                 }
 
-                const tarea = await respuesta.json();
+                const medicamento = await respuesta.json();
 
-                document.getElementById("tareaId").textContent =
-                    tarea.id;
+                document.getElementById("medicamentoId").textContent = medicamento.id;
+                document.getElementById("nombre").textContent = medicamento.nombre;
+                document.getElementById("descripcion").textContent = medicamento.descripcion;
+                document.getElementById("precio").textContent = `$${medicamento.precio}`;
+                document.getElementById("stock").textContent = `${medicamento.stock} unidades`;
 
-                document.getElementById("titulo").textContent =
-                    tarea.titulo;
+                const disponibilidad = document.getElementById("disponibilidad");
 
-                document.getElementById("descripcion").textContent =
-                    tarea.descripcion;
+                if (medicamento.disponible) {
 
-                const estado = document.getElementById("estado");
-
-                if (tarea.completada) {
-
-                    estado.textContent = "Completada";
-                    estado.className = "estado completada";
+                    disponibilidad.textContent = "Disponible";
+                    disponibilidad.className = "estado disponible";
 
                 } else {
 
-                    estado.textContent = "Pendiente";
-                    estado.className = "estado pendiente";
+                    disponibilidad.textContent = "No disponible";
+                    disponibilidad.className = "estado no-disponible";
 
                 }
 
@@ -357,7 +375,7 @@
 
             } catch (error) {
 
-                console.error("Error al consultar tarea:", error);
+                console.error("Error al consultar medicamento:", error);
 
                 mostrarMensaje(error.message, true);
 
@@ -365,16 +383,10 @@
 
         }
 
-
-        // =========================================
-        // ELIMINAR TAREA - DELETE
-        // API: /api/tareas/<id>/
-        // =========================================
-
         btnEliminar.addEventListener("click", async function() {
 
             const confirmar = confirm(
-                "¿Estás seguro de que deseas eliminar esta tarea?"
+                "¿Estás seguro de que deseas eliminar este medicamento?"
             );
 
             if (!confirmar) {
@@ -384,17 +396,15 @@
             btnEliminar.disabled = true;
             btnEliminar.textContent = "Eliminando...";
 
-            mostrarMensaje("Eliminando tarea...");
+            mostrarMensaje("Eliminando medicamento...");
 
             try {
 
                 const respuesta = await fetch(
-                    `/api/tareas/${tareaId}/`,
+                    `/api/medicamentos/${medicamentoId}/`,
                     {
                         method: "DELETE",
-
                         credentials: "same-origin",
-
                         headers: {
                             "X-CSRFToken": csrfToken,
                             "Accept": "application/json"
@@ -420,7 +430,7 @@
                 if (respuesta.status === 404) {
 
                     throw new Error(
-                        "La tarea ya no existe o fue eliminada anteriormente."
+                        "El medicamento ya no existe o fue eliminado anteriormente."
                     );
 
                 }
@@ -428,18 +438,18 @@
                 if (!respuesta.ok) {
 
                     throw new Error(
-                        `No se pudo eliminar la tarea. HTTP ${respuesta.status}`
+                        `No se pudo eliminar el medicamento. HTTP ${respuesta.status}`
                     );
 
                 }
 
                 mostrarMensaje(
-                    "Tarea eliminada correctamente. Volviendo al listado..."
+                    "Medicamento eliminado correctamente. Volviendo al inventario..."
                 );
 
                 setTimeout(function() {
 
-                    window.location.href = "/tareas/";
+                    window.location.href = "/medicamentos/";
 
                 }, 1000);
 
@@ -450,18 +460,13 @@
                 mostrarMensaje(error.message, true);
 
                 btnEliminar.disabled = false;
-                btnEliminar.textContent = "Sí, eliminar tarea";
+                btnEliminar.textContent = "Sí, eliminar medicamento";
 
             }
 
         });
 
-
-        // =========================================
-        // CARGA INICIAL
-        // =========================================
-
-        cargarTarea();
+        cargarMedicamento();
 
     </script>
 

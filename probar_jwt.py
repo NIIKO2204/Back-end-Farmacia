@@ -15,70 +15,80 @@ if respuesta.status_code == 200:
 
     print("Autenticación exitosa")
 
-    # 2. Utilizar Access Token para consultar tareas
+    # 2. Utilizar Access Token para consultar medicamentos
     headers = {"Authorization": f"Bearer {access}"}
 
-    respuesta_tareas = requests.get(f"{URL}/api/tareas/", headers=headers)
+    respuesta_medicamentos = requests.get(
+        f"{URL}/api/medicamentos/", headers=headers
+    )
 
-    print("\nCódigo HTTP:", respuesta_tareas.status_code)
+    print("\nCódigo HTTP:", respuesta_medicamentos.status_code)
 
-    if respuesta_tareas.status_code == 200:
-        print("Tareas registradas:")
-        print(respuesta_tareas.json())
+    if respuesta_medicamentos.status_code == 200:
+        print("Medicamentos registrados:")
+        print(respuesta_medicamentos.json())
     else:
-        print("Error:", respuesta_tareas.text)
+        print("Error:", respuesta_medicamentos.text)
 
 else:
     print("Error al iniciar sesión:", respuesta.text)
 
 
-# 3. Crear una nueva tarea mediante POST
+# 3. Crear un nuevo medicamento mediante POST
 
-nueva_tarea = {
-    "titulo": "Tarea creada desde Python",
-    "descripcion": "Probando autenticacion JWT",
-    "completada": False,
+nuevo_medicamento = {
+    "nombre": "Paracetamol 500mg",
+    "descripcion": "Analgésico y antipirético, caja de 20 comprimidos",
+    "precio": 2500.00,
+    "stock": 30,
+    "disponible": True,
 }
 
 respuesta_creacion = requests.post(
-    f"{URL}/api/tareas/", json=nueva_tarea, headers=headers
+    f"{URL}/api/medicamentos/", json=nuevo_medicamento, headers=headers
 )
 
-print("\nCreacion de tarea:")
-print("Codigo HTTP:", respuesta_creacion.status_code)
+print("\nCreación de medicamento:")
+print("Código HTTP:", respuesta_creacion.status_code)
 print(respuesta_creacion.json())
 
 
-# 4. Actualizar una tarea mediante PUT
+# 4. Actualizar un medicamento mediante PUT
 
-id_tarea = 2
+id_medicamento = 2
 
 datos_actualizados = {
-    "titulo": "Tarea actualizada desde Python",
-    "descripcion": "Probando el metodo PUT con JWT",
-    "completada": True,
+    "nombre": "Paracetamol 500mg Forte",
+    "descripcion": "Probando el método PUT con JWT en farmacia",
+    "precio": 3200.00,
+    "stock": 45,
+    "disponible": True,
 }
 
 respuesta_put = requests.put(
-    f"{URL}/api/tareas/{id_tarea}/", json=datos_actualizados, headers=headers
+    f"{URL}/api/medicamentos/{id_medicamento}/",
+    json=datos_actualizados,
+    headers=headers,
 )
 
-print("\nActualizacion de tarea:")
-print("Codigo HTTP:", respuesta_put.status_code)
+print("\nActualización de medicamento:")
+print("Código HTTP:", respuesta_put.status_code)
 print(respuesta_put.json())
 
 
-# 5. Eliminar una tarea mediante DELETE
+# 5. Eliminar un medicamento mediante DELETE
 
-id_tarea = 3
+id_medicamento = 3
 
-respuesta_delete = requests.delete(f"{URL}/api/tareas/{id_tarea}/", headers=headers)
+respuesta_delete = requests.delete(
+    f"{URL}/api/medicamentos/{id_medicamento}/", headers=headers
+)
 
-print("\nEliminacion de tarea:")
-print("Codigo HTTP:", respuesta_delete.status_code)
+print("\nEliminación de medicamento:")
+print("Código HTTP:", respuesta_delete.status_code)
 
 if respuesta_delete.status_code == 204:
-    print("Tarea eliminada correctamente")
+    print("Medicamento eliminado correctamente")
 else:
     print(respuesta_delete.text)
 
@@ -89,8 +99,8 @@ respuesta_refresh = requests.post(
     f"{URL}/api/token/refresh/", json={"refresh": refresh}
 )
 
-print("\nRenovacion de Access Token:")
-print("Codigo HTTP:", respuesta_refresh.status_code)
+print("\nRenovación de Access Token:")
+print("Código HTTP:", respuesta_refresh.status_code)
 
 if respuesta_refresh.status_code == 200:
 

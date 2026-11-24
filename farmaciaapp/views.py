@@ -18,7 +18,7 @@ from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.exceptions import TokenError
 
-from .models import Tarea
+from .models import Medicamento
 
 # =====================================================
 # AUTENTICACION WEB MEDIANTE SESION DJANGO
@@ -145,9 +145,9 @@ class SessionJWTAuthentication(BaseAuthentication):
 def login_pagina(request):
 
     if request.session.get("access") and request.session.get("refresh"):
-        return redirect("/tareas/")
+        return redirect("/medicamentos/")
 
-    return render(request, "tareasapp/login.html")
+    return render(request, "farmaciaapp/login.html")
 
 
 @require_POST
@@ -229,152 +229,184 @@ def cerrar_sesion(request):
 
 @sesion_web_requerida
 def inicio(request):
-    return render(request, "tareasapp/inicio.html")
+    return render(request, "farmaciaapp/inicio.html")
 
 
 @sesion_web_requerida
-def crear_tarea(request):
-    return render(request, "tareasapp/crear.html")
+def crear_medicamento(request):
+    return render(request, "farmaciaapp/crear.html")
 
 
 @sesion_web_requerida
-def detalle_tarea(request, id):
-    return render(request, "tareasapp/detalle.html")
+def detalle_medicamento(request, id):
+    return render(request, "farmaciaapp/detalle.html")
 
 
 @sesion_web_requerida
-def editar_tarea(request, id):
-    return render(request, "tareasapp/editar.html")
+def editar_medicamento(request, id):
+    return render(request, "farmaciaapp/editar.html")
 
 
 @sesion_web_requerida
-def eliminar_tarea(request, id):
-    return render(request, "tareasapp/eliminar.html")
+def eliminar_medicamento(request, id):
+    return render(request, "farmaciaapp/eliminar.html")
 
 
 # =====================================================
-# API REST - TAREAS
+# API REST - MEDICAMENTOS
 # ACEPTA JWT BEARER Y JWT DESDE SESION WEB
 # =====================================================
 
 
-class TareasApiView(APIView):
+class MedicamentosApiView(APIView):
 
     authentication_classes = [JWTAuthentication, SessionJWTAuthentication]
 
     permission_classes = [IsAuthenticated]
 
-    # GET: listar todas las tareas.
+    # GET: listar todos los medicamentos.
     def get(self, request):
 
-        tareas = Tarea.objects.all()
+        medicamentos = Medicamento.objects.all()
 
         datos = []
 
-        for tarea in tareas:
+        for medicamento in medicamentos:
             datos.append(
                 {
-                    "id": tarea.id,
-                    "titulo": tarea.titulo,
-                    "descripcion": tarea.descripcion,
-                    "completada": tarea.completada,
+                    "id": medicamento.id,
+                    "nombre": medicamento.nombre,
+                    "descripcion": medicamento.descripcion,
+                    "precio": medicamento.precio,
+                    "stock": medicamento.stock,
+                    "disponible": medicamento.disponible,
                 }
             )
 
         return Response(datos, status=status.HTTP_200_OK)
 
-    # POST: crear una nueva tarea.
+    # POST: crear un nuevo medicamento.
     def post(self, request):
 
-        titulo = request.data.get("titulo")
+        nombre = request.data.get("nombre")
         descripcion = request.data.get("descripcion")
-        completada = request.data.get("completada", False)
+        precio = request.data.get("precio")
+        stock = request.data.get("stock")
+        disponible = request.data.get("disponible", True)
 
-        if not titulo or not descripcion:
+        if (
+            not nombre
+            or not descripcion
+            or precio is None
+            or stock is None
+        ):
             return Response(
-                {"error": "El titulo y la descripcion son obligatorios"},
+                {
+                    "error": "El nombre, la descripcion, el precio y el stock son obligatorios"
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        tarea = Tarea.objects.create(
-            titulo=titulo, descripcion=descripcion, completada=completada
+        medicamento = Medicamento.objects.create(
+            nombre=nombre,
+            descripcion=descripcion,
+            precio=precio,
+            stock=stock,
+            disponible=disponible,
         )
 
         return Response(
             {
-                "mensaje": "Tarea creada correctamente",
-                "tarea": {
-                    "id": tarea.id,
-                    "titulo": tarea.titulo,
-                    "descripcion": tarea.descripcion,
-                    "completada": tarea.completada,
+                "mensaje": "Medicamento creado correctamente",
+                "medicamento": {
+                    "id": medicamento.id,
+                    "nombre": medicamento.nombre,
+                    "descripcion": medicamento.descripcion,
+                    "precio": medicamento.precio,
+                    "stock": medicamento.stock,
+                    "disponible": medicamento.disponible,
                 },
             },
             status=status.HTTP_201_CREATED,
         )
 
 
-class TareaDetalleApiView(APIView):
+class MedicamentoDetalleApiView(APIView):
 
     authentication_classes = [JWTAuthentication, SessionJWTAuthentication]
 
     permission_classes = [IsAuthenticated]
 
-    # GET: consultar tarea por ID.
+    # GET: consultar medicamento por ID.
     def get(self, request, id):
 
-        tarea = get_object_or_404(Tarea, id=id)
+        medicamento = get_object_or_404(Medicamento, id=id)
 
         return Response(
             {
-                "id": tarea.id,
-                "titulo": tarea.titulo,
-                "descripcion": tarea.descripcion,
-                "completada": tarea.completada,
+                "id": medicamento.id,
+                "nombre": medicamento.nombre,
+                "descripcion": medicamento.descripcion,
+                "precio": medicamento.precio,
+                "stock": medicamento.stock,
+                "disponible": medicamento.disponible,
             },
             status=status.HTTP_200_OK,
         )
 
-    # DELETE: eliminar tarea.
+    # DELETE: eliminar medicamento.
     def delete(self, request, id):
 
-        tarea = get_object_or_404(Tarea, id=id)
-        tarea.delete()
+        medicamento = get_object_or_404(Medicamento, id=id)
+        medicamento.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     # PUT: actualizar todos los campos.
     def put(self, request, id):
 
-        tarea = get_object_or_404(Tarea, id=id)
+        medicamento = get_object_or_404(Medicamento, id=id)
 
-        titulo = request.data.get("titulo")
+        nombre = request.data.get("nombre")
         descripcion = request.data.get("descripcion")
-        completada = request.data.get("completada")
+        precio = request.data.get("precio")
+        stock = request.data.get("stock")
+        disponible = request.data.get("disponible")
 
-        if titulo is None or descripcion is None or completada is None:
+        if (
+            nombre is None
+            or descripcion is None
+            or precio is None
+            or stock is None
+            or disponible is None
+        ):
             return Response(
                 {"error": "Debes enviar todos los campos"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if not isinstance(titulo, str) or not titulo.strip():
+        if not isinstance(nombre, str) or not nombre.strip():
             return Response(
-                {"error": "El titulo es obligatorio"},
+                {"error": "El nombre es obligatorio"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        tarea.titulo = titulo
-        tarea.descripcion = descripcion
-        tarea.completada = completada
-        tarea.save()
+        medicamento.nombre = nombre
+        medicamento.descripcion = descripcion
+        medicamento.precio = precio
+        medicamento.stock = stock
+        medicamento.disponible = disponible
+        medicamento.save()
 
         return Response(
             {
-                "mensaje": "Tarea Actualizada correctamente",
-                "id": tarea.id,
-                "descripcion": tarea.descripcion,
-                "completada": tarea.completada,
+                "mensaje": "Medicamento actualizado correctamente",
+                "id": medicamento.id,
+                "nombre": medicamento.nombre,
+                "descripcion": medicamento.descripcion,
+                "precio": medicamento.precio,
+                "stock": medicamento.stock,
+                "disponible": medicamento.disponible,
             },
             status=status.HTTP_200_OK,
         )

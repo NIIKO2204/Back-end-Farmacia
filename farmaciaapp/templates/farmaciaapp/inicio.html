@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de tareas</title>
+    <title>Inventario - Farmacia Salud</title>
 
     <style>
         * {
@@ -17,21 +16,42 @@
         body {
             min-height: 100vh;
             font-family: "Segoe UI", Arial, sans-serif;
-            color: #1e293b;
-            background: linear-gradient(135deg, #dbeafe, #eff6ff, #bfdbfe);
+            color: #0f172a;
+            background: linear-gradient(135deg, #d1fae5, #ecfdf5, #a7f3d0);
         }
 
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 6%;
-            background: white;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.10);
+            padding: 18px 6%;
+            background: #ffffff;
+            border-bottom: 3px solid #10b981;
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.10);
+        }
+
+        .marca {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .cruz {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #10b981, #047857);
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 700;
         }
 
         .navbar h2 {
-            color: #1d4ed8;
+            color: #065f46;
+            font-size: 20px;
         }
 
         .usuario {
@@ -41,15 +61,16 @@
         }
 
         .estado {
-            color: #166534;
-            background: #dcfce7;
+            color: #065f46;
+            background: #d1fae5;
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
         }
 
-        button, .btn {
+        button,
+        .btn {
             padding: 10px 16px;
             border: none;
             border-radius: 8px;
@@ -66,7 +87,7 @@
         }
 
         .btn-cerrar {
-            color: white;
+            color: #ffffff;
             background: #dc2626;
         }
 
@@ -75,63 +96,81 @@
         }
 
         .btn-crear {
-            color: white;
-            background: #2563eb;
+            color: #ffffff;
+            background: #059669;
         }
 
         .btn-crear:hover {
-            background: #1d4ed8;
+            background: #047857;
+        }
+
+        .btn-actualizar {
+            color: #065f46;
+            background: #d1fae5;
+        }
+
+        .btn-actualizar:hover {
+            background: #a7f3d0;
         }
 
         .btn-ver {
-            color: white;
-            background: #0891b2;
+            color: #ffffff;
+            background: #0284c7;
         }
 
         .btn-editar {
-            color: white;
+            color: #ffffff;
             background: #d97706;
         }
 
         .btn-eliminar {
-            color: white;
+            color: #ffffff;
             background: #dc2626;
         }
 
         .contenedor {
             width: 90%;
             max-width: 1150px;
-            margin: 45px auto;
+            margin: 40px auto;
         }
 
-        .bienvenida, .panel-tareas {
-            padding: 30px;
-            background: white;
+        .bienvenida,
+        .panel-medicamentos {
+            padding: 28px;
+            background: #ffffff;
+            border: 1px solid #d1fae5;
             border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.10);
-            margin-bottom: 25px;
+            box-shadow: 0 10px 28px rgba(5, 150, 105, 0.10);
+            margin-bottom: 24px;
         }
 
         h1 {
-            color: #1d4ed8;
-            margin-bottom: 10px;
+            color: #065f46;
+            margin-bottom: 8px;
+            font-size: 26px;
         }
 
         .bienvenida p {
-            color: #64748b;
+            color: #475569;
             line-height: 1.6;
         }
 
-        .cabecera-tareas {
+        .cabecera-medicamentos {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 22px;
         }
 
-        .cabecera-tareas h2 {
-            color: #1e40af;
+        .cabecera-medicamentos h2 {
+            color: #065f46;
+        }
+
+        .cabecera-medicamentos p {
+            color: #64748b;
+            font-size: 14px;
+            margin-top: 4px;
         }
 
         .tabla-contenedor {
@@ -141,18 +180,20 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 650px;
+            min-width: 780px;
         }
 
-        th, td {
-            padding: 15px;
+        th,
+        td {
+            padding: 14px 15px;
             text-align: left;
             border-bottom: 1px solid #e2e8f0;
         }
 
         th {
-            background: #eff6ff;
-            color: #1e40af;
+            background: #ecfdf5;
+            color: #065f46;
+            font-weight: 700;
         }
 
         tr:hover td {
@@ -166,38 +207,41 @@
         }
 
         .acciones button {
-            padding: 8px 10px;
+            padding: 8px 11px;
             font-size: 12px;
         }
 
-        .estado-tarea {
+        .estado-medicamento {
             padding: 5px 10px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
+            white-space: nowrap;
         }
 
-        .completada {
-            color: #166534;
-            background: #dcfce7;
+        .disponible {
+            color: #065f46;
+            background: #d1fae5;
         }
 
-        .pendiente {
+        .no-disponible {
             color: #92400e;
             background: #fef3c7;
         }
 
         .mensaje {
-            padding: 15px;
+            padding: 14px;
             margin: 15px 0;
             border-radius: 8px;
-            color: #1e40af;
-            background: #eff6ff;
+            color: #065f46;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
         }
 
         .mensaje-error {
             color: #991b1b;
             background: #fee2e2;
+            border-color: #fecaca;
         }
 
         .vacio {
@@ -209,12 +253,13 @@
         .botones-panel {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         @media (max-width: 700px) {
             .navbar {
                 flex-direction: column;
-                gap: 15px;
+                gap: 14px;
             }
 
             .usuario {
@@ -222,16 +267,17 @@
                 justify-content: center;
             }
 
-            .cabecera-tareas {
+            .cabecera-medicamentos {
                 flex-direction: column;
                 align-items: flex-start;
             }
 
             .contenedor {
-                margin: 25px auto;
+                margin: 22px auto;
             }
 
-            .bienvenida, .panel-tareas {
+            .bienvenida,
+            .panel-medicamentos {
                 padding: 20px;
             }
         }
@@ -244,15 +290,18 @@
 
     <header class="navbar">
 
-        <h2>Gestión de tareas</h2>
+        <div class="marca">
+            <span class="cruz" aria-hidden="true">+</span>
+            <h2>Farmacia Salud</h2>
+        </div>
 
         <div class="usuario">
 
             <span>
-                Usuario: <strong>{{ request.session.usuario }}</strong>
+                Químico / Operador: <strong>{{ request.session.usuario }}</strong>
             </span>
 
-            <span class="estado">Sesión activa</span>
+            <span class="estado">Turno activo</span>
 
             <button
                 type="button"
@@ -274,32 +323,31 @@
             </h1>
 
             <p>
-                Administra tus tareas utilizando la API REST
-                protegida mediante autenticación JWT.
+                Controla el catálogo de fármacos, precios, existencias en bodega y disponibilidad desde la API REST con JWT.
             </p>
 
         </section>
 
-        <section class="panel-tareas">
+        <section class="panel-medicamentos">
 
-            <div class="cabecera-tareas">
+            <div class="cabecera-medicamentos">
 
                 <div>
-                    <h2>Listado de tareas</h2>
-                    <p>Registros almacenados en la base de datos.</p>
+                    <h2>Catálogo de medicamentos</h2>
+                    <p>Existencias registradas en el sistema de farmacia.</p>
                 </div>
 
                 <div class="botones-panel">
 
                     <a href="/crear/" class="btn btn-crear">
-                        + Nueva tarea
+                        + Registrar medicamento
                     </a>
 
                     <button
                         type="button"
-                        class="btn-crear"
+                        class="btn-actualizar"
                         id="btnActualizar">
-                        Actualizar
+                        Actualizar stock
                     </button>
 
                 </div>
@@ -307,7 +355,7 @@
             </div>
 
             <div id="mensaje" class="mensaje">
-                Cargando tareas...
+                Cargando medicamentos...
             </div>
 
             <div class="tabla-contenedor">
@@ -317,14 +365,16 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Título</th>
-                            <th>Descripción</th>
-                            <th>Estado</th>
+                            <th>Medicamento</th>
+                            <th>Presentación / Detalle</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Disponibilidad</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
 
-                    <tbody id="tablaTareas">
+                    <tbody id="tablaMedicamentos">
                     </tbody>
 
                 </table>
@@ -337,37 +387,26 @@
 
     <script>
 
-        const tablaTareas = document.getElementById("tablaTareas");
+        const tablaMedicamentos = document.getElementById("tablaMedicamentos");
         const mensaje = document.getElementById("mensaje");
         const csrfToken = document.querySelector(
-            '[name=csrfmiddlewaretoken]'
+            "[name=csrfmiddlewaretoken]"
         ).value;
 
-        // =========================================
-        // CONTROL DE SESION EXPIRADA
-        // =========================================
-
         function redirigirLogin() {
-
             window.location.replace("/?expired=1");
-
         }
 
-        // =========================================
-        // CONSULTAR TAREAS - GET
-        // API: /api/tareas/
-        // =========================================
+        async function cargarMedicamentos() {
 
-        async function cargarTareas() {
-
-            mensaje.textContent = "Consultando tareas...";
+            mensaje.textContent = "Consultando inventario de medicamentos...";
             mensaje.className = "mensaje";
 
-            tablaTareas.innerHTML = "";
+            tablaMedicamentos.innerHTML = "";
 
             try {
 
-                const respuesta = await fetch("/api/tareas/", {
+                const respuesta = await fetch("/api/medicamentos/", {
 
                     method: "GET",
 
@@ -392,20 +431,20 @@
                 }
 
                 if (!respuesta.ok) {
-                    throw new Error("No fue posible consultar las tareas.");
+                    throw new Error("No fue posible consultar los medicamentos.");
                 }
 
-                const tareas = await respuesta.json();
+                const medicamentos = await respuesta.json();
 
-                if (tareas.length === 0) {
+                if (medicamentos.length === 0) {
 
                     mensaje.textContent =
-                        "No existen tareas registradas en la base de datos.";
+                        "No existen medicamentos registrados en el inventario.";
 
-                    tablaTareas.innerHTML = `
+                    tablaMedicamentos.innerHTML = `
                         <tr>
-                            <td colspan="5" class="vacio">
-                                No hay tareas para mostrar.
+                            <td colspan="7" class="vacio">
+                                No hay medicamentos registrados para mostrar.
                             </td>
                         </tr>
                     `;
@@ -414,36 +453,40 @@
                 }
 
                 mensaje.textContent =
-                    "Se encontraron " + tareas.length + " tarea(s).";
+                    "Se encontraron " + medicamentos.length + " medicamento(s) en inventario.";
 
-                tareas.forEach(tarea => {
+                medicamentos.forEach(medicamento => {
 
                     const fila = document.createElement("tr");
 
-                    const estado = tarea.completada
-                        ? "Completada"
-                        : "Pendiente";
+                    const estado = medicamento.disponible
+                        ? "Disponible"
+                        : "No disponible";
 
-                    const claseEstado = tarea.completada
-                        ? "completada"
-                        : "pendiente";
+                    const claseEstado = medicamento.disponible
+                        ? "disponible"
+                        : "no-disponible";
 
-                    // Se utiliza textContent para mostrar datos
-                    // de la base de datos de forma segura.
                     const id = document.createElement("td");
-                    id.textContent = tarea.id;
+                    id.textContent = medicamento.id;
 
-                    const titulo = document.createElement("td");
-                    titulo.textContent = tarea.titulo;
+                    const nombre = document.createElement("td");
+                    nombre.textContent = medicamento.nombre;
 
                     const descripcion = document.createElement("td");
-                    descripcion.textContent = tarea.descripcion;
+                    descripcion.textContent = medicamento.descripcion;
+
+                    const precio = document.createElement("td");
+                    precio.textContent = `$${medicamento.precio}`;
+
+                    const stock = document.createElement("td");
+                    stock.textContent = `${medicamento.stock} un.`;
 
                     const estadoCelda = document.createElement("td");
 
                     const etiqueta = document.createElement("span");
                     etiqueta.className =
-                        "estado-tarea " + claseEstado;
+                        "estado-medicamento " + claseEstado;
                     etiqueta.textContent = estado;
 
                     estadoCelda.appendChild(etiqueta);
@@ -455,21 +498,21 @@
                     btnVer.className = "btn-ver";
                     btnVer.textContent = "Ver";
                     btnVer.addEventListener("click", () => {
-                        window.location.href = `/detalle/${tarea.id}/`;
+                        window.location.href = `/detalle/${medicamento.id}/`;
                     });
 
                     const btnEditar = document.createElement("button");
                     btnEditar.className = "btn-editar";
                     btnEditar.textContent = "Editar";
                     btnEditar.addEventListener("click", () => {
-                        window.location.href = `/editar/${tarea.id}/`;
+                        window.location.href = `/editar/${medicamento.id}/`;
                     });
 
                     const btnEliminar = document.createElement("button");
                     btnEliminar.className = "btn-eliminar";
                     btnEliminar.textContent = "Eliminar";
                     btnEliminar.addEventListener("click", () => {
-                        window.location.href = `/eliminar/${tarea.id}/`;
+                        window.location.href = `/eliminar/${medicamento.id}/`;
                     });
 
                     acciones.append(
@@ -480,20 +523,22 @@
 
                     fila.append(
                         id,
-                        titulo,
+                        nombre,
                         descripcion,
+                        precio,
+                        stock,
                         estadoCelda,
                         acciones
                     );
 
-                    tablaTareas.appendChild(fila);
+                    tablaMedicamentos.appendChild(fila);
 
                 });
 
             } catch (error) {
 
                 mensaje.textContent =
-                    "Error al consultar las tareas: " + error.message;
+                    "Error al consultar los medicamentos: " + error.message;
 
                 mensaje.className = "mensaje mensaje-error";
 
@@ -501,16 +546,8 @@
 
         }
 
-        // =========================================
-        // ACTUALIZAR LISTADO
-        // =========================================
-
         document.getElementById("btnActualizar")
-            .addEventListener("click", cargarTareas);
-
-        // =========================================
-        // CERRAR SESION
-        // =========================================
+            .addEventListener("click", cargarMedicamentos);
 
         document.getElementById("btnCerrarSesion")
             .addEventListener("click", async function() {
@@ -564,13 +601,10 @@
 
             });
 
-        // =========================================
-        // CARGA INICIAL
-        // =========================================
-
-        cargarTareas();
+        cargarMedicamentos();
 
     </script>
 
 </body>
+
 </html>

@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar tarea</title>
+    <title>Editar medicamento - Farmacia Salud</title>
 
     <style>
         * {
@@ -17,40 +16,59 @@
         body {
             min-height: 100vh;
             font-family: "Segoe UI", Arial, sans-serif;
-            color: #1e293b;
-            background: linear-gradient(135deg, #dbeafe, #eff6ff, #bfdbfe);
+            color: #0f172a;
+            background: linear-gradient(135deg, #d1fae5, #ecfdf5, #a7f3d0);
         }
 
         .navbar {
-            padding: 20px 6%;
-            background: white;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.10);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 6%;
+            background: #ffffff;
+            border-bottom: 3px solid #10b981;
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.10);
+        }
+
+        .cruz {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #10b981, #047857);
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
         }
 
         .navbar h2 {
-            color: #1d4ed8;
+            color: #065f46;
+            font-size: 20px;
         }
 
         .contenedor {
             width: 90%;
             max-width: 700px;
-            margin: 55px auto;
+            margin: 45px auto;
         }
 
         .panel {
-            background: white;
+            background: #ffffff;
             padding: 35px;
+            border: 1px solid #d1fae5;
             border-radius: 18px;
-            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.10);
+            box-shadow: 0 12px 30px rgba(5, 150, 105, 0.12);
         }
 
         h1 {
-            color: #1d4ed8;
+            color: #065f46;
             margin-bottom: 10px;
         }
 
         .descripcion-panel {
-            color: #64748b;
+            color: #475569;
             margin-bottom: 25px;
             line-height: 1.5;
         }
@@ -63,16 +81,20 @@
             display: block;
             font-weight: 600;
             margin-bottom: 8px;
+            color: #1e293b;
         }
 
-        input[type="text"], textarea {
+        input[type="text"],
+        input[type="number"],
+        textarea {
             width: 100%;
             padding: 12px;
             border: 1px solid #cbd5e1;
             border-radius: 8px;
-            background: #eff6ff;
+            background: #f0fdf4;
             font-family: inherit;
             font-size: 15px;
+            color: #0f172a;
         }
 
         textarea {
@@ -80,9 +102,11 @@
             resize: vertical;
         }
 
-        input:focus, textarea:focus {
-            outline: 2px solid #93c5fd;
-            border-color: #2563eb;
+        input:focus,
+        textarea:focus {
+            outline: 3px solid rgba(16, 185, 129, 0.18);
+            border-color: #059669;
+            background: #ffffff;
         }
 
         .checkbox {
@@ -94,6 +118,7 @@
         .checkbox input {
             width: 17px;
             height: 17px;
+            accent-color: #059669;
         }
 
         .checkbox label {
@@ -107,7 +132,8 @@
             margin-top: 25px;
         }
 
-        button, .boton {
+        button,
+        .boton {
             padding: 12px 18px;
             border: none;
             border-radius: 8px;
@@ -124,36 +150,43 @@
         }
 
         .guardar {
-            color: white;
-            background: #2563eb;
+            color: #ffffff;
+            background: #059669;
         }
 
         .guardar:hover {
-            background: #1d4ed8;
+            background: #047857;
         }
 
         .volver {
-            color: #1e40af;
-            background: #dbeafe;
+            color: #065f46;
+            background: #d1fae5;
+        }
+
+        .volver:hover {
+            background: #a7f3d0;
         }
 
         .mensaje {
             padding: 14px;
             margin-bottom: 20px;
             border-radius: 8px;
-            color: #1e40af;
-            background: #eff6ff;
+            color: #065f46;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
             line-height: 1.5;
         }
 
         .mensaje-error {
             color: #991b1b;
             background: #fee2e2;
+            border-color: #fecaca;
         }
 
         .mensaje-exito {
-            color: #166534;
-            background: #dcfce7;
+            color: #065f46;
+            background: #d1fae5;
+            border-color: #a7f3d0;
         }
 
         @media (max-width: 600px) {
@@ -173,48 +206,79 @@
     {% csrf_token %}
 
     <header class="navbar">
-        <h2>Gestión de tareas</h2>
+        <span class="cruz" aria-hidden="true">+</span>
+        <h2>Farmacia Salud</h2>
     </header>
 
     <main class="contenedor">
 
         <section class="panel">
 
-            <h1>Editar tarea</h1>
+            <h1>Editar medicamento</h1>
 
             <p class="descripcion-panel">
-                Modifica la información de la tarea seleccionada.
+                Actualiza los datos, precio, stock o disponibilidad del medicamento.
             </p>
 
             <p id="mensaje" class="mensaje">
-                Cargando información de la tarea...
+                Cargando información del medicamento...
             </p>
 
             <form id="formEditar" hidden>
 
                 <div class="campo">
 
-                    <label for="titulo">Título:</label>
+                    <label for="nombre">Nombre del medicamento:</label>
 
                     <input
                         type="text"
-                        id="titulo"
+                        id="nombre"
                         required
-                        maxlength="200"
-                        placeholder="Ingresa el título"
+                        maxlength="100"
+                        placeholder="Ingresa el nombre"
                     >
 
                 </div>
 
                 <div class="campo">
 
-                    <label for="descripcion">Descripción:</label>
+                    <label for="descripcion">Descripción / Presentación:</label>
 
                     <textarea
                         id="descripcion"
                         required
-                        placeholder="Describe la tarea"
+                        placeholder="Describe el medicamento"
                     ></textarea>
+
+                </div>
+
+                <div class="campo">
+
+                    <label for="precio">Precio ($):</label>
+
+                    <input
+                        type="number"
+                        id="precio"
+                        step="0.01"
+                        min="0"
+                        required
+                        placeholder="Ej: 2500.00"
+                    >
+
+                </div>
+
+                <div class="campo">
+
+                    <label for="stock">Stock en bodega (unidades):</label>
+
+                    <input
+                        type="number"
+                        id="stock"
+                        min="0"
+                        step="1"
+                        required
+                        placeholder="Ej: 20"
+                    >
 
                 </div>
 
@@ -222,11 +286,11 @@
 
                     <input
                         type="checkbox"
-                        id="completada"
+                        id="disponible"
                     >
 
-                    <label for="completada">
-                        Tarea completada
+                    <label for="disponible">
+                        Disponible para dispensación
                     </label>
 
                 </div>
@@ -241,8 +305,8 @@
                         Guardar cambios
                     </button>
 
-                    <a href="/tareas/" class="boton volver">
-                        Volver al listado
+                    <a href="/medicamentos/" class="boton volver">
+                        Volver al inventario
                     </a>
 
                 </div>
@@ -255,33 +319,26 @@
 
     <script>
 
-        // =========================================
-        // CONFIGURACION
-        // =========================================
-
         const partesURL = window.location.pathname
             .split("/")
             .filter(Boolean);
 
-        const tareaId = partesURL[partesURL.length - 1];
+        const medicamentoId = partesURL[partesURL.length - 1];
 
         const formulario = document.getElementById("formEditar");
 
-        const campoTitulo = document.getElementById("titulo");
+        const campoNombre = document.getElementById("nombre");
         const campoDescripcion = document.getElementById("descripcion");
-        const campoCompletada = document.getElementById("completada");
+        const campoPrecio = document.getElementById("precio");
+        const campoStock = document.getElementById("stock");
+        const campoDisponible = document.getElementById("disponible");
 
         const mensaje = document.getElementById("mensaje");
         const botonGuardar = document.getElementById("btnGuardar");
 
         const csrfToken = document.querySelector(
-            '[name=csrfmiddlewaretoken]'
+            "[name=csrfmiddlewaretoken]"
         ).value;
-
-
-        // =========================================
-        // MOSTRAR MENSAJES
-        // =========================================
 
         function mostrarMensaje(texto, tipo) {
 
@@ -295,18 +352,12 @@
 
         }
 
-
-        // =========================================
-        // CONSULTAR TAREA - GET
-        // API: /api/tareas/<id>/
-        // =========================================
-
-        async function cargarTarea() {
+        async function cargarMedicamento() {
 
             try {
 
                 const respuesta = await fetch(
-                    `/api/tareas/${tareaId}/`,
+                    `/api/medicamentos/${medicamentoId}/`,
                     {
                         method: "GET",
                         credentials: "same-origin",
@@ -334,7 +385,7 @@
                 if (respuesta.status === 404) {
 
                     throw new Error(
-                        "La tarea solicitada no existe."
+                        "El medicamento solicitado no existe."
                     );
 
                 }
@@ -342,27 +393,29 @@
                 if (!respuesta.ok) {
 
                     throw new Error(
-                        `No se pudo cargar la tarea. HTTP ${respuesta.status}`
+                        `No se pudo cargar el medicamento. HTTP ${respuesta.status}`
                     );
 
                 }
 
-                const tarea = await respuesta.json();
+                const medicamento = await respuesta.json();
 
-                campoTitulo.value = tarea.titulo;
-                campoDescripcion.value = tarea.descripcion;
-                campoCompletada.checked = tarea.completada;
+                campoNombre.value = medicamento.nombre;
+                campoDescripcion.value = medicamento.descripcion;
+                campoPrecio.value = medicamento.precio;
+                campoStock.value = medicamento.stock;
+                campoDisponible.checked = medicamento.disponible;
 
                 formulario.hidden = false;
 
                 mostrarMensaje(
-                    `Editando tarea #${tarea.id}`,
+                    `Editando medicamento #${medicamento.id}`,
                     "normal"
                 );
 
             } catch (error) {
 
-                console.error("Error al cargar tarea:", error);
+                console.error("Error al cargar medicamento:", error);
 
                 mostrarMensaje(error.message, "error");
 
@@ -370,30 +423,36 @@
 
         }
 
-
-        // =========================================
-        // ACTUALIZAR TAREA - PUT
-        // API: /api/tareas/<id>/
-        // =========================================
-
         formulario.addEventListener("submit", async function(evento) {
 
             evento.preventDefault();
 
+            const precio = Number(campoPrecio.value);
+            const stock = Number(campoStock.value);
+
             const datos = {
 
-                titulo: campoTitulo.value.trim(),
-
+                nombre: campoNombre.value.trim(),
                 descripcion: campoDescripcion.value.trim(),
-
-                completada: campoCompletada.checked
+                precio: precio,
+                stock: Math.trunc(stock),
+                disponible: campoDisponible.checked
 
             };
 
-            if (!datos.titulo || !datos.descripcion) {
+            if (
+                !datos.nombre ||
+                !datos.descripcion ||
+                campoPrecio.value === "" ||
+                campoStock.value === "" ||
+                Number.isNaN(precio) ||
+                Number.isNaN(stock) ||
+                precio < 0 ||
+                stock < 0
+            ) {
 
                 mostrarMensaje(
-                    "El título y la descripción son obligatorios.",
+                    "Debes ingresar nombre, descripción, precio y stock válidos.",
                     "error"
                 );
 
@@ -404,23 +463,20 @@
             botonGuardar.disabled = true;
             botonGuardar.textContent = "Guardando cambios...";
 
-            mostrarMensaje("Actualizando tarea...", "normal");
+            mostrarMensaje("Actualizando medicamento...", "normal");
 
             try {
 
                 const respuesta = await fetch(
-                    `/api/tareas/${tareaId}/`,
+                    `/api/medicamentos/${medicamentoId}/`,
                     {
                         method: "PUT",
-
                         credentials: "same-origin",
-
                         headers: {
                             "Content-Type": "application/json",
                             "Accept": "application/json",
                             "X-CSRFToken": csrfToken
                         },
-
                         body: JSON.stringify(datos)
                     }
                 );
@@ -453,13 +509,13 @@
                 }
 
                 mostrarMensaje(
-                    "Tarea actualizada correctamente.",
+                    "Medicamento actualizado correctamente.",
                     "exito"
                 );
 
                 setTimeout(function() {
 
-                    window.location.href = "/tareas/";
+                    window.location.href = "/medicamentos/";
 
                 }, 1200);
 
@@ -476,12 +532,7 @@
 
         });
 
-
-        // =========================================
-        // CARGA INICIAL
-        // =========================================
-
-        cargarTarea();
+        cargarMedicamento();
 
     </script>
 

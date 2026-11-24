@@ -12,12 +12,14 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Tarea',
+            name='Medicamento',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('titulo', models.CharField(max_length=100)),
+                ('nombre', models.CharField(max_length=100)),
                 ('descripcion', models.TextField()),
-                ('completada', models.BooleanField(default=False)),
+                ('precio', models.DecimalField(max_digits=10, decimal_places=2)),
+                ('stock', models.PositiveIntegerField(default=0)),
+                ('disponible', models.BooleanField(default=True)),
             ],
         ),
     ]
