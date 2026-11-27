@@ -32,11 +32,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework.authtoken",
-    # Lista negra para revocar Refresh Tokens
+    "drf_spectacular",
     "rest_framework_simplejwt.token_blacklist",
     "farmaciaapp",
 ]
-
 
 # =====================================================
 # MIDDLEWARE
@@ -150,6 +149,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema", 
 }
 
 
@@ -200,3 +200,24 @@ CSRF_COOKIE_SAMESITE = "Lax"
 
 # En producción con HTTPS debe configurarse como True
 CSRF_COOKIE_SECURE = False
+
+# =====================================================
+# CONFIGURACION SWAGGER (DRF-SPECTACULAR)
+# =====================================================
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "API Farmacia",
+    "DESCRIPTION": "Documentación Swagger para la gestión de medicamentos con JWT",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SECURITY": [{"jwtAuth": []}],
+    "APPEND_COMPONENTS": {
+        "securitySchemes": {
+            "jwtAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+            }
+        }
+    },
+}
